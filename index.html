@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b0b1a">
+  <meta name="theme-color" content="#08080d">
   <meta name="description" content="Ish Garg is an aspiring AI and machine learning engineer building practical AI, data, and workflow automation projects.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Ish Garg — AI, Data & Automation">
@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./visual-refresh.css">
   <script src="./script.js" defer></script>
+  <script src="./network.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -63,6 +64,7 @@
 
         <div class="hero-art" data-reveal aria-label="Illustration of an AI workflow connecting data, models, and useful outputs">
           <img class="hero-orbit-image" src="./assets/hero-orbit.webp" alt="" aria-hidden="true" fetchpriority="high">
+          <canvas class="network-canvas" id="network-canvas" aria-hidden="true"></canvas>
           <div class="art-grid" aria-hidden="true"></div>
           <div class="orbit orbit-one" aria-hidden="true"></div>
           <div class="orbit orbit-two" aria-hidden="true"></div>
@@ -76,7 +78,7 @@
             <button class="flow-run" id="run-workflow" type="button"><span class="play-icon" aria-hidden="true">▶</span> Run sample</button>
             <span class="flow-demo-status" id="workflow-status" aria-live="polite">LOCAL DEMO · READY</span>
           </div>
-          <div class="art-caption"><span>FROM AN IDEA</span><span class="caption-arrow">→</span><span>TO SOMETHING USEFUL</span></div>
+          <div class="art-caption"><span>MOVE TO INTERACT</span><span class="caption-arrow">↗</span></div>
           <span class="art-orb orb-a" aria-hidden="true"></span><span class="art-orb orb-b" aria-hidden="true"></span>
         </div>
       </div>

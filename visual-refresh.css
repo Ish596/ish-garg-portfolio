@@ -1,15 +1,15 @@
 /* A bolder, more colorful art direction for Ish's portfolio. */
 :root {
   color-scheme: dark;
-  --bg: #0b0b1a;
-  --bg-soft: #101124;
-  --panel: #15162c;
-  --ink: #f7f6ff;
-  --muted: #b6b6cc;
-  --quiet: #8789a7;
-  --mint: #79f1d1;
-  --blue: #a39bff;
-  --stroke: rgba(197, 192, 255, .16);
+  --bg: #08080d;
+  --bg-soft: #0d0c14;
+  --panel: #14121d;
+  --ink: #f8f7ff;
+  --muted: #b9b7c8;
+  --quiet: #888698;
+  --mint: #a7ff75;
+  --blue: #bf9cff;
+  --stroke: rgba(198, 189, 223, .16);
   --max: 1220px;
   --sans: "Space Grotesk", "Manrope", "Segoe UI", sans-serif;
 }
@@ -17,15 +17,15 @@
 html { scroll-padding-top: 84px; }
 body {
   background:
-    radial-gradient(ellipse at 8% 8%, rgba(63, 68, 176, .2), transparent 31rem),
-    radial-gradient(ellipse at 91% 29%, rgba(25, 169, 165, .09), transparent 27rem),
+    radial-gradient(ellipse at 8% 8%, rgba(104, 73, 179, .14), transparent 31rem),
+    radial-gradient(ellipse at 91% 29%, rgba(104, 173, 59, .055), transparent 27rem),
     var(--bg);
   color: var(--ink);
 }
 body::before {
   z-index: -1;
   opacity: .48;
-  background-image: linear-gradient(rgba(176, 171, 255, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(176, 171, 255, .025) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(205, 196, 226, .022) 1px, transparent 1px), linear-gradient(90deg, rgba(205, 196, 226, .022) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: linear-gradient(to bottom, #000, transparent 75%);
 }
@@ -114,10 +114,10 @@ body::before {
 }
 .button-primary {
   color: #0b1120;
-  background: linear-gradient(105deg, #79f1d1, #8ad6f4 56%, #a99bff);
+  background: linear-gradient(105deg, #a7ff75, #8ad6f4 56%, #b99bff);
   box-shadow: 0 8px 28px rgba(113, 184, 242, .2);
 }
-.button-primary:hover { background: linear-gradient(105deg, #a5ffe5, #b4e5ff 56%, #c4b8ff); box-shadow: 0 12px 35px rgba(113, 184, 242, .3); }
+.button-primary:hover { background: linear-gradient(105deg, #d4ffac, #b4e5ff 56%, #d4b8ff); box-shadow: 0 12px 35px rgba(113, 184, 242, .3); }
 .button-quiet { color: #eeeefe; }
 .button-quiet span, .hero-socials a span { color: var(--mint); }
 .hero-socials { color: #a3a1bd; margin-top: 34px; font-size: 10px; }
@@ -147,7 +147,7 @@ body::before {
 .hero-art::after { right: -100px; top: -120px; background: radial-gradient(circle, rgba(163, 155, 255, .24), transparent 70%); }
 .hero-orbit-image {
   position: absolute;
-  z-index: 1;
+  z-index: 0;
   width: 124%;
   max-width: none;
   height: auto;
@@ -156,6 +156,15 @@ body::before {
   opacity: .94;
   filter: drop-shadow(0 16px 44px rgba(51, 81, 255, .33));
   animation: orbit-float 8s ease-in-out infinite;
+  pointer-events: none;
+}
+.network-canvas {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .82;
   pointer-events: none;
 }
 @keyframes orbit-float { 0%, 100% { transform: translateY(-5px) rotate(-1deg); } 50% { transform: translateY(7px) rotate(1deg); } }
@@ -402,7 +411,7 @@ dialog.case-dialog::backdrop { background: rgba(5, 5, 17, .82); }
   .flow-demo-control { left: 12px; bottom: 11px; gap: 6px; }
   .flow-run { padding: 8px 11px; font-size: 8px; }
   .flow-demo-status { max-width: 105px; font-size: 6px; }
-  .art-caption { display: none; }
+  .art-caption { display: flex; right: 12px; bottom: 15px; font-size: 6px; }
   .hero-bottom { margin-top: 27px; font-size: 7px; }
   .hero-bottom-note { font-size: 6px; }
   .ticker { height: 48px; }
