@@ -70,6 +70,10 @@
           <div class="flow-card flow-model"><span class="flow-icon icon-ai" aria-hidden="true">✳</span><span><b>AI + ML</b><small>useful models</small></span></div>
           <div class="flow-line line-two" aria-hidden="true"><i></i></div>
           <div class="flow-card flow-output"><span class="flow-icon icon-flow" aria-hidden="true">↗</span><span><b>AUTOMATION</b><small>better workflows</small></span></div>
+          <div class="flow-demo-control">
+            <button class="flow-run" id="run-workflow" type="button"><span class="play-icon" aria-hidden="true">▶</span> Run sample</button>
+            <span class="flow-demo-status" id="workflow-status" aria-live="polite">LOCAL DEMO · READY</span>
+          </div>
           <div class="art-caption"><span>FROM AN IDEA</span><span class="caption-arrow">→</span><span>TO SOMETHING USEFUL</span></div>
           <span class="art-orb orb-a" aria-hidden="true"></span><span class="art-orb orb-b" aria-hidden="true"></span>
         </div>
@@ -122,7 +126,7 @@
         </div>
 
         <div class="project-grid">
-          <article class="project-card project-card-featured" data-category="ai ml" data-reveal>
+          <article class="project-card project-card-featured" data-project-id="vantara" data-category="ai ml" data-reveal>
             <div class="project-visual visual-vantara" aria-label="Customer analytics dashboard illustration">
               <div class="dashboard-top"><span class="dash-brand"><i></i> VANTARA</span><span class="dash-period">CUSTOMER INTELLIGENCE <b>● LIVE VIEW</b></span></div>
               <div class="dash-content">
@@ -151,50 +155,55 @@
               <h3>Vantara <span>— Customer Behavior Platform</span></h3>
               <p>A retail analytics platform for exploring customer behavior, predicting churn, and surfacing useful segments. Built with a Python ML pipeline, FastAPI, and an interactive dashboard.</p>
               <div class="tag-list"><span>Python</span><span>Machine Learning</span><span>FastAPI</span><span>Streamlit</span></div>
+              <button class="case-study-button" type="button" data-open-case="vantara">Explore case study <span aria-hidden="true">↗</span></button>
               <div class="project-links"><a href="https://github.com/Ish596/vantara-platform" target="_blank" rel="noopener noreferrer">View source <span aria-hidden="true">↗</span></a><a class="live-link" href="https://vantara-platform-eg5kzm6eyygkva35viiby3.streamlit.app/" target="_blank" rel="noopener noreferrer">Live dashboard <span aria-hidden="true">↗</span></a></div>
             </div>
           </article>
 
-          <article class="project-card" data-category="ai automation" data-reveal>
+          <article class="project-card" data-project-id="recruitment" data-category="ai automation" data-reveal>
             <div class="project-visual project-shot"><img src="./assets/hr-recruitment.png" alt="n8n workflow for AI-assisted recruitment screening" loading="lazy"><span class="visual-index">AUTOMATION / 02</span></div>
             <div class="project-body">
               <div class="project-meta"><span>02 / AI + AUTOMATION</span><span class="project-status status-prototype"><i></i> PROTOTYPE</span></div>
               <h3>Recruitment Screening Workflow</h3>
               <p>Collects applications, extracts resume details, compares profiles with a job description, then routes a preliminary score for human review.</p>
               <div class="tag-list"><span>n8n</span><span>Gemini</span><span>Python</span><span>Google Workspace</span></div>
+              <button class="case-study-button" type="button" data-open-case="recruitment">Explore case study <span aria-hidden="true">↗</span></button>
               <div class="project-links"><a href="https://github.com/Ish596/HR---Recruitment-Automation-System-" target="_blank" rel="noopener noreferrer">View source <span aria-hidden="true">↗</span></a></div>
             </div>
           </article>
 
-          <article class="project-card" data-category="ai automation" data-reveal>
+          <article class="project-card" data-project-id="email" data-category="ai automation" data-reveal>
             <div class="project-visual project-shot"><img src="./assets/email-assistant.png" alt="n8n workflow for AI email summaries and approval-based replies" loading="lazy"><span class="visual-index">AUTOMATION / 03</span></div>
             <div class="project-body">
               <div class="project-meta"><span>03 / GENERATIVE AI</span><span class="project-status"><i></i> HUMAN APPROVAL</span></div>
               <h3>AI Email Assistant</h3>
               <p>Summarizes incoming emails, decides when a reply is needed, and prepares a Gmail draft. Telegram approval keeps a person in control before sending.</p>
               <div class="tag-list"><span>n8n</span><span>Gemini</span><span>Gmail API</span><span>Telegram</span></div>
+              <button class="case-study-button" type="button" data-open-case="email">Explore case study <span aria-hidden="true">↗</span></button>
               <div class="project-links"><a href="https://github.com/Ish596/AI-Gmail-managing-automation-" target="_blank" rel="noopener noreferrer">View source <span aria-hidden="true">↗</span></a></div>
             </div>
           </article>
 
-          <article class="project-card" data-category="automation" data-reveal>
+          <article class="project-card" data-project-id="sales" data-category="automation" data-reveal>
             <div class="project-visual project-shot"><img src="./assets/sales-leads.png" alt="n8n workflow for qualifying and routing sales leads" loading="lazy"><span class="visual-index">AUTOMATION / 04</span></div>
             <div class="project-body">
               <div class="project-meta"><span>04 / BUSINESS AUTOMATION</span><span class="project-status"><i></i> WORKFLOW</span></div>
               <h3>Sales Lead Qualification</h3>
               <p>Verifies and enriches lead details, applies a scoring rule, and routes the result into reports and notifications across connected apps.</p>
               <div class="tag-list"><span>n8n</span><span>Hunter.io</span><span>Airtable</span><span>Sheets · Slack</span></div>
+              <button class="case-study-button" type="button" data-open-case="sales">Explore case study <span aria-hidden="true">↗</span></button>
               <div class="project-links"><a href="https://github.com/Ish596/-sales-lead-automation" target="_blank" rel="noopener noreferrer">View source <span aria-hidden="true">↗</span></a></div>
             </div>
           </article>
 
-          <article class="project-card" data-category="automation" data-reveal>
+          <article class="project-card" data-project-id="opsflow" data-category="automation" data-reveal>
             <div class="project-visual project-shot"><img src="./assets/opsflow.png" alt="n8n OpsFlow workflow with data merge, conditional routing, and notifications" loading="lazy"><span class="visual-index">AUTOMATION / 05</span></div>
             <div class="project-body">
               <div class="project-meta"><span>05 / WORKFLOW COLLECTION</span><span class="project-status status-learning"><i></i> IN PROGRESS</span></div>
               <h3>OpsFlow Automation</h3>
               <p>A growing collection of n8n workflows exploring data cleanup, merging, branching, duplicate handling, and app integrations.</p>
               <div class="tag-list"><span>n8n</span><span>Google Sheets</span><span>Gmail</span><span>Slack</span></div>
+              <button class="case-study-button" type="button" data-open-case="opsflow">Explore case study <span aria-hidden="true">↗</span></button>
               <div class="project-links"><a href="https://github.com/Ish596/Opsflow-automation" target="_blank" rel="noopener noreferrer">View source <span aria-hidden="true">↗</span></a></div>
             </div>
           </article>
@@ -225,7 +234,11 @@
           <p class="eyebrow">04 <span class="eyebrow-rule"></span> SAY HELLO</p>
           <h2 id="contact-title">Let’s build<br><span>something useful.</span></h2>
           <p>Interested in AI, automation, or an entry-level opportunity? I’d be glad to connect.</p>
-          <a class="button button-primary" href="mailto:gargish686@gmail.com">Email Ish <span aria-hidden="true">↗</span></a>
+          <div class="contact-actions">
+            <a class="button button-primary" href="mailto:gargish686@gmail.com">Email Ish <span aria-hidden="true">↗</span></a>
+            <button class="copy-email" id="copy-email" type="button" data-email="gargish686@gmail.com">Copy email</button>
+            <span class="copy-status" id="copy-status" aria-live="polite"></span>
+          </div>
         </div>
         <div class="contact-links">
           <a href="mailto:gargish686@gmail.com"><span>EMAIL</span><b>gargish686@gmail.com</b><i aria-hidden="true">↗</i></a>
@@ -234,6 +247,26 @@
         </div>
       </div>
     </section>
+
+    <dialog class="case-dialog" id="case-dialog" aria-labelledby="case-title">
+      <div class="dialog-shell">
+        <button class="dialog-close" type="button" aria-label="Close case study">×</button>
+        <p class="eyebrow" id="case-eyebrow">PROJECT / CASE STUDY</p>
+        <h2 id="case-title"></h2>
+        <p class="dialog-summary" id="case-summary"></p>
+        <div class="dialog-content">
+          <section>
+            <h3>How it works</h3>
+            <ol class="case-steps" id="case-steps"></ol>
+          </section>
+          <section>
+            <h3>Tools used</h3>
+            <div class="tag-list" id="case-tags"></div>
+          </section>
+        </div>
+        <div class="dialog-links" id="case-links"></div>
+      </div>
+    </dialog>
   </main>
 
   <footer class="site-footer">
