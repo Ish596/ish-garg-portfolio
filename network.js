@@ -1,102 +1,104 @@
 (() => {
   const canvas = document.querySelector('#network-canvas');
-  const surface = canvas?.closest('.hero-art');
   const context = canvas?.getContext('2d', { alpha: true });
-  if (!canvas || !surface || !context) return;
+  if (!canvas || !context) return;
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const points = [];
+  const stars = [];
   const pointer = { x: -1000, y: -1000, active: false };
   let width = 0;
   let height = 0;
-  let pixelRatio = 1;
   let animationFrame = 0;
 
-  function draw() {
+  function paint() {
     context.clearRect(0, 0, width, height);
 
     if (pointer.active && !prefersReducedMotion) {
-      const glow = context.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, 165);
-      glow.addColorStop(0, 'rgba(191, 156, 255, .11)');
-      glow.addColorStop(1, 'rgba(191, 156, 255, 0)');
+      const glow = context.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, 210);
+      glow.addColorStop(0, 'rgba(154, 139, 255, .14)');
+      glow.addColorStop(.48, 'rgba(68, 197, 227, .07)');
+      glow.addColorStop(1, 'rgba(68, 197, 227, 0)');
       context.fillStyle = glow;
       context.fillRect(0, 0, width, height);
     }
 
-    for (let first = 0; first < points.length; first += 1) {
-      const point = points[first];
-      for (let second = first + 1; second < points.length; second += 1) {
-        const other = points[second];
-        const dx = other.x - point.x;
-        const dy = other.y - point.y;
-        const distance = Math.hypot(dx, dy);
-        if (distance < 105) {
+    for (let first = 0; first < stars.length; first += 1) {
+      const star = stars[first];
+      for (let second = first + 1; second < stars.length; second += 1) {
+        const neighbor = stars[second];
+        const distance = Math.hypot(neighbor.x - star.x, neighbor.y - star.y);
+        if (distance < 118) {
           context.beginPath();
-          context.moveTo(point.x, point.y);
-          context.lineTo(other.x, other.y);
-          context.strokeStyle = `rgba(167, 255, 117, ${(1 - distance / 105) * .2})`;
-          context.lineWidth = .7;
+          context.moveTo(star.x, star.y);
+          context.lineTo(neighbor.x, neighbor.y);
+          context.strokeStyle = `${star.linkColor}${((1 - distance / 118) * .24).toFixed(3)})`;
+          context.lineWidth = .65;
           context.stroke();
         }
       }
 
       if (pointer.active && !prefersReducedMotion) {
-        const distanceToPointer = Math.hypot(point.x - pointer.x, point.y - pointer.y);
-        if (distanceToPointer < 145) {
+        const distanceToPointer = Math.hypot(star.x - pointer.x, star.y - pointer.y);
+        if (distanceToPointer < 170) {
           context.beginPath();
           context.moveTo(pointer.x, pointer.y);
-          context.lineTo(point.x, point.y);
-          context.strokeStyle = `rgba(191, 156, 255, ${(1 - distanceToPointer / 145) * .32})`;
-          context.lineWidth = .9;
+          context.lineTo(star.x, star.y);
+          context.strokeStyle = `rgba(167, 221, 255, ${(1 - distanceToPointer / 170) * .42})`;
+          context.lineWidth = .8;
           context.stroke();
         }
       }
 
       context.beginPath();
-      context.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
-      context.fillStyle = point.tint;
-      context.globalAlpha = point.alpha;
+      context.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      context.globalAlpha = star.alpha + (Math.sin(star.phase) + 1) * .08;
+      context.fillStyle = star.tint;
       context.fill();
       context.globalAlpha = 1;
 
       if (!prefersReducedMotion) {
-        point.x += point.vx;
-        point.y += point.vy;
-        if (point.x < -4 || point.x > width + 4) point.vx *= -1;
-        if (point.y < -4 || point.y > height + 4) point.vy *= -1;
+        star.x += star.vx;
+        star.y += star.vy;
+        star.phase += .018;
+        if (star.x < -3 || star.x > width + 3) star.vx *= -1;
+        if (star.y < -3 || star.y > height + 3) star.vy *= -1;
       }
     }
   }
 
   function animate() {
     if (document.hidden || prefersReducedMotion) return;
-    draw();
+    paint();
     animationFrame = window.requestAnimationFrame(animate);
   }
 
   function resize() {
-    const bounds = surface.getBoundingClientRect();
-    width = bounds.width;
-    height = bounds.height;
-    pixelRatio = Math.min(window.devicePixelRatio || 1, 1.6);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
     canvas.width = Math.round(width * pixelRatio);
     canvas.height = Math.round(height * pixelRatio);
     context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 
-    const count = Math.max(25, Math.min(58, Math.round((width * height) / 6800)));
-    points.length = 0;
+    const count = Math.max(28, Math.min(70, Math.round((width * height) / 17000)));
+    stars.length = 0;
     for (let index = 0; index < count; index += 1) {
-      points.push({
+      const tintIndex = index % 8;
+      const tint = tintIndex === 0 ? '#ffa9d6' : tintIndex < 4 ? '#a9eaff' : '#c3b6ff';
+      const linkColor = tintIndex === 0 ? 'rgba(255, 169, 214, ' : tintIndex < 4 ? 'rgba(133, 224, 255, ' : 'rgba(180, 164, 255, ';
+      stars.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - .5) * .32,
-        vy: (Math.random() - .5) * .32,
-        radius: .8 + Math.random() * 1.3,
-        alpha: .35 + Math.random() * .45,
-        tint: index % 6 === 0 ? '#bf9cff' : '#a7ff75'
+        vx: (Math.random() - .5) * .22,
+        vy: (Math.random() - .5) * .22,
+        radius: .6 + Math.random() * 1.2,
+        alpha: .25 + Math.random() * .48,
+        phase: Math.random() * Math.PI * 2,
+        tint,
+        linkColor
       });
     }
-    draw();
+    paint();
     if (!prefersReducedMotion && !document.hidden) {
       window.cancelAnimationFrame(animationFrame);
       animationFrame = window.requestAnimationFrame(animate);
@@ -104,15 +106,13 @@
   }
 
   if (!prefersReducedMotion) {
-    surface.addEventListener('pointermove', (event) => {
-      const bounds = surface.getBoundingClientRect();
-      pointer.x = event.clientX - bounds.left;
-      pointer.y = event.clientY - bounds.top;
+    window.addEventListener('pointermove', (event) => {
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
       pointer.active = true;
     }, { passive: true });
-    surface.addEventListener('pointerleave', () => { pointer.active = false; }, { passive: true });
+    window.addEventListener('blur', () => { pointer.active = false; });
   }
-
   window.addEventListener('resize', resize, { passive: true });
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) window.cancelAnimationFrame(animationFrame);

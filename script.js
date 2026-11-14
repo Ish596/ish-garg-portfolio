@@ -130,30 +130,88 @@ caseDialog?.addEventListener('click', (event) => {
 const runButton = document.querySelector('#run-workflow');
 const workflowStatus = document.querySelector('#workflow-status');
 if (runButton && workflowStatus) {
+  const scenarios = {
+    email: {
+      nodes: [
+        ['EMAIL TRIGGER', 'unread inbox message'],
+        ['AI SUMMARY', 'Gemini reads the message'],
+        ['HUMAN APPROVAL', 'draft waits for review']
+      ],
+      steps: ['1/3 · READING THE INBOX', '2/3 · SUMMARIZING WITH GEMINI', '3/3 · PREPARING A REPLY'],
+      done: 'DONE · WAITING FOR HUMAN APPROVAL'
+    },
+    recruitment: {
+      nodes: [
+        ['RESUME UPLOAD', 'new applicant PDF'],
+        ['PROFILE MATCH', 'skills vs. job criteria'],
+        ['REVIEW QUEUE', 'person makes the decision']
+      ],
+      steps: ['1/3 · EXTRACTING RESUME DETAILS', '2/3 · MATCHING ROLE SKILLS', '3/3 · SENDING FOR REVIEW'],
+      done: 'DONE · HUMAN HIRING REVIEW'
+    },
+    sales: {
+      nodes: [
+        ['LEAD CAPTURE', 'new website enquiry'],
+        ['AI QUALIFICATION', 'company fit + score'],
+        ['CRM ROUTING', 'notify the sales owner']
+      ],
+      steps: ['1/3 · CHECKING NEW LEAD', '2/3 · SCORING COMPANY FIT', '3/3 · ROUTING TO THE CRM'],
+      done: 'DONE · SALES OWNER NOTIFIED'
+    }
+  };
+  const scenarioButtons = [...document.querySelectorAll('.scenario-button')];
+  const nodeCards = [document.querySelector('.flow-input'), document.querySelector('.flow-model'), document.querySelector('.flow-output')];
+  const connectors = [document.querySelector('.line-one'), document.querySelector('.line-two')];
+  const nodeTitles = [document.querySelector('#flow-input-title'), document.querySelector('#flow-model-title'), document.querySelector('#flow-output-title')];
+  const nodeDetails = [document.querySelector('#flow-input-detail'), document.querySelector('#flow-model-detail'), document.querySelector('#flow-output-detail')];
+  let selectedScenario = 'email';
+
+  function chooseScenario(name) {
+    if (!scenarios[name]) return;
+    selectedScenario = name;
+    scenarios[name].nodes.forEach(([title, detail], index) => {
+      nodeTitles[index].textContent = title;
+      nodeDetails[index].textContent = detail;
+    });
+    scenarioButtons.forEach((button) => {
+      const active = button.dataset.scenario === name;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+    nodeCards.forEach((node) => node.classList.remove('is-active', 'is-done'));
+    connectors.forEach((line) => line.classList.remove('is-lit'));
+    workflowStatus.textContent = 'LOCAL DEMO · READY';
+    runButton.innerHTML = '<span class="play-icon" aria-hidden="true">▶</span> Run sample';
+  }
+
+  scenarioButtons.forEach((button) => {
+    button.addEventListener('click', () => chooseScenario(button.dataset.scenario));
+  });
+
   runButton.addEventListener('click', async () => {
-    const nodes = [document.querySelector('.flow-input'), document.querySelector('.flow-model'), document.querySelector('.flow-output')];
-    const connectors = [document.querySelector('.line-one'), document.querySelector('.line-two')];
-    const labels = ['1/3 · COLLECTING INPUT', '2/3 · ANALYZING WITH AI', '3/3 · ROUTING FOR REVIEW'];
+    const scenario = scenarios[selectedScenario];
     const delay = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 180 : 720;
     runButton.disabled = true;
     runButton.innerHTML = '<span class="play-icon" aria-hidden="true">◌</span> Running';
-    nodes.forEach((node) => node.classList.remove('is-active', 'is-done'));
+    scenarioButtons.forEach((button) => { button.disabled = true; });
+    nodeCards.forEach((node) => node.classList.remove('is-active', 'is-done'));
     connectors.forEach((line) => line.classList.remove('is-lit'));
-    for (let index = 0; index < nodes.length; index += 1) {
+    for (let index = 0; index < nodeCards.length; index += 1) {
       await new Promise((resolve) => window.setTimeout(resolve, delay));
       if (index > 0) {
-        nodes[index - 1].classList.remove('is-active');
-        nodes[index - 1].classList.add('is-done');
+        nodeCards[index - 1].classList.remove('is-active');
+        nodeCards[index - 1].classList.add('is-done');
         connectors[index - 1].classList.add('is-lit');
       }
-      nodes[index].classList.add('is-active');
-      workflowStatus.textContent = labels[index];
+      nodeCards[index].classList.add('is-active');
+      workflowStatus.textContent = scenario.steps[index];
     }
     await new Promise((resolve) => window.setTimeout(resolve, delay));
-    nodes[2].classList.remove('is-active');
-    nodes[2].classList.add('is-done');
-    workflowStatus.textContent = 'DONE · HUMAN IN CONTROL';
+    nodeCards[2].classList.remove('is-active');
+    nodeCards[2].classList.add('is-done');
+    workflowStatus.textContent = scenario.done;
     runButton.disabled = false;
+    scenarioButtons.forEach((button) => { button.disabled = false; });
     runButton.innerHTML = '<span class="play-icon" aria-hidden="true">▶</span> Run again';
   });
 }
