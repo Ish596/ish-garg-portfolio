@@ -770,3 +770,71 @@ dialog.case-dialog::backdrop { background: rgba(2, 3, 13, .86); }
   .project-card { border-radius: 17px; }
   .contact-panel { border-radius: 22px; }
 }
+
+/* Pointer-driven depth: the hero and project surfaces tilt like layered objects. */
+.hero-grid { perspective: 1500px; perspective-origin: 50% 45%; }
+.hero-art {
+  transform: perspective(1250px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transform-style: preserve-3d;
+  transition: transform .24s cubic-bezier(.2,.7,.25,1), box-shadow .5s ease;
+  will-change: transform;
+}
+.hero-orbit-image { translate: 0 0 34px; }
+.art-grid { transform: translateZ(5px); }
+.orbit-one { translate: 0 0 14px; }
+.orbit-two { translate: 0 0 24px; }
+.scenario-switcher { transform: translateZ(60px); }
+.art-label-top, .flow-demo-control, .art-caption { transform: translateZ(68px); }
+.flow-card {
+  transform: translateZ(42px);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+.flow-card.is-active { transform: translateY(-3px) translateZ(48px); }
+.flow-icon { transform: translateZ(8px); }
+
+.project-card {
+  overflow: visible;
+  transform: perspective(1150px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transform-style: preserve-3d;
+  transition: transform .22s cubic-bezier(.2,.7,.25,1), border-color .28s, box-shadow .28s;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.project-card:hover {
+  transform: perspective(1150px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-5px) translateZ(10px);
+}
+.project-card::after { transform: translateZ(2px); }
+.project-visual { transform: translateZ(10px); transform-style: preserve-3d; }
+.project-body { transform: translateZ(18px); transform-style: preserve-3d; }
+.project-visual .visual-index { transform: translateZ(12px); }
+.project-card:not(.project-card-featured) > .project-visual { border-radius: 19px 19px 0 0; }
+.project-card-featured > .project-visual { border-radius: 19px 0 0 19px; }
+
+.contact-panel {
+  transform: perspective(1400px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transform-style: preserve-3d;
+  transition: transform .3s ease, box-shadow .4s ease;
+  will-change: transform;
+}
+.contact-copy, .contact-links { transform: translateZ(14px); }
+.contact-orbit { transform: translateZ(-10px); }
+.skill-row { transform: perspective(900px) rotateX(0deg); transform-origin: center; transition: background .25s, transform .25s; }
+.skill-row:hover { transform: perspective(900px) rotateX(2deg) translateZ(8px); }
+
+@media (max-width: 900px) {
+  .hero-art { transform: perspective(1250px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) scale(.97); }
+}
+@media (max-width: 680px) {
+  .hero-grid { perspective: none; }
+  .hero-art { transform: none; transition: none; will-change: auto; }
+  .project-card, .project-card:hover { transform: none; transition: border-color .25s, box-shadow .25s; will-change: auto; }
+  .project-card-featured > .project-visual { border-radius: 17px 17px 0 0; }
+  .project-body { transform: translateZ(8px); }
+  .contact-panel { transform: none; transition: box-shadow .3s ease; will-change: auto; }
+  .contact-copy, .contact-links { transform: none; }
+  .skill-row:hover { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-art, .project-card, .contact-panel, .skill-row { transition: none !important; }
+}

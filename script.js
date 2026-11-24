@@ -234,11 +234,21 @@ copyEmailButton?.addEventListener('click', async () => {
 });
 
 if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
-  projectCards.forEach((card) => {
-    card.addEventListener('pointermove', (event) => {
-      const bounds = card.getBoundingClientRect();
-      card.style.setProperty('--pointer-x', (event.clientX - bounds.left) + 'px');
-      card.style.setProperty('--pointer-y', (event.clientY - bounds.top) + 'px');
+  const depthSurfaces = [...projectCards, ...document.querySelectorAll('.hero-art, .contact-panel')];
+  depthSurfaces.forEach((surface) => {
+    surface.addEventListener('pointermove', (event) => {
+      const bounds = surface.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width;
+      const y = (event.clientY - bounds.top) / bounds.height;
+      const tiltStrength = surface.classList.contains('hero-art') ? 7 : surface.classList.contains('contact-panel') ? 3 : 8;
+      surface.style.setProperty('--pointer-x', (event.clientX - bounds.left) + 'px');
+      surface.style.setProperty('--pointer-y', (event.clientY - bounds.top) + 'px');
+      surface.style.setProperty('--tilt-x', ((.5 - y) * tiltStrength).toFixed(2) + 'deg');
+      surface.style.setProperty('--tilt-y', ((x - .5) * tiltStrength).toFixed(2) + 'deg');
+    });
+    surface.addEventListener('pointerleave', () => {
+      surface.style.setProperty('--tilt-x', '0deg');
+      surface.style.setProperty('--tilt-y', '0deg');
     });
   });
 }
