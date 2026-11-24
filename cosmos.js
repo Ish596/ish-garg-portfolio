@@ -68,9 +68,11 @@
     const normalLength = Math.hypot(Math.cos(angle) / radiusX, Math.sin(angle) / radiusY) || 1;
     const normalX = (Math.cos(angle) / radiusX) / normalLength;
     const normalY = (Math.sin(angle) / radiusY) / normalLength;
+    const followX = pointer.active && !pointer.down ? (pointer.x - centerX) * .2 : 0;
+    const followY = pointer.active && !pointer.down ? (pointer.y - centerY) * .16 : 0;
     return {
-      x: centerX + x + normalX * spread,
-      y: centerY + y + normalY * spread
+      x: centerX + followX + x + normalX * spread,
+      y: centerY + followY + y + normalY * spread
     };
   }
 
