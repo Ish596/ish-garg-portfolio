@@ -1289,10 +1289,13 @@ dialog.case-dialog::backdrop { background: rgba(0, 0, 0, .88); }
 }
 ::selection { color: #17130d; background: #dcbf88; }
 .brand-mark {
+  border-color: rgba(224, 201, 158, .46) !important;
+  color: #ead5ad !important;
   background: radial-gradient(circle at 38% 35%, rgba(244, 225, 190, .16), rgba(119, 83, 36, .12) 52%, rgba(5, 5, 5, .96));
   box-shadow: 0 0 22px rgba(220, 185, 125, .11);
 }
-.brand-mark::after { border-color: rgba(224, 201, 158, .26); }
+.brand-mark::after { border-color: rgba(224, 201, 158, .26) !important; }
+.hero h1.hero-nameplate { user-select: none; -webkit-user-select: none; }
 .section-heading h2 span, .contact h2 span {
   color: #dec18c !important;
   background: none !important;

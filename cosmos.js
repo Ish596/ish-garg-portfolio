@@ -103,7 +103,7 @@
     context.clearRect(0, 0, width, height);
     pointer.x += (pointer.targetX - pointer.x) * .035;
     pointer.y += (pointer.targetY - pointer.y) * .035;
-    pointer.burst *= .955;
+    pointer.burst *= .978;
 
     for (const star of stars) {
       const dx = star.x - pointer.x;
@@ -111,7 +111,7 @@
       const distance = Math.hypot(dx, dy);
       const strength = pointer.down ? 1 : pointer.active ? .68 : pointer.burst;
       if (distance < 118 && distance > .1 && strength > .01) {
-        const force = (1 - distance / 118) ** 2 * strength * 2.2 * frameScale;
+        const force = (1 - distance / 118) ** 2 * strength * 5.6 * frameScale;
         star.vx += dx / distance * force;
         star.vy += dy / distance * force;
       }
@@ -144,7 +144,7 @@
       const interactionRadius = 142;
       const strength = pointer.down ? 1 : pointer.active ? .68 : pointer.burst;
       if (distance < interactionRadius && distance > .1 && strength > .01) {
-        const force = (1 - distance / interactionRadius) ** 2 * strength * 2.6 * frameScale;
+        const force = (1 - distance / interactionRadius) ** 2 * strength * 6.5 * frameScale;
         particle.vx += dx / distance * force;
         particle.vy += dy / distance * force;
       }
@@ -223,14 +223,14 @@
   if (!reducedMotion) {
     hero.addEventListener('pointermove', (event) => {
       const bounds = hero.getBoundingClientRect();
-      pointer.targetX = ((event.clientX - bounds.left) / bounds.width - .5) * 2;
-      pointer.targetY = ((event.clientY - bounds.top) / bounds.height - .5) * 2;
+      pointer.targetX = event.clientX - bounds.left;
+      pointer.targetY = event.clientY - bounds.top;
       pointer.active = event.pointerType !== 'touch' || pointer.down;
     }, { passive: true });
     hero.addEventListener('pointerdown', (event) => {
       const bounds = hero.getBoundingClientRect();
-      pointer.targetX = ((event.clientX - bounds.left) / bounds.width - .5) * 2;
-      pointer.targetY = ((event.clientY - bounds.top) / bounds.height - .5) * 2;
+      pointer.targetX = event.clientX - bounds.left;
+      pointer.targetY = event.clientY - bounds.top;
       pointer.down = true;
       pointer.active = true;
       pointer.burst = 1;
@@ -249,8 +249,6 @@
       pointer.down = false;
       pointer.active = false;
       pointer.burst = Math.max(pointer.burst, .65);
-      pointer.targetX = 0;
-      pointer.targetY = 0;
     }, { passive: true });
   }
 
