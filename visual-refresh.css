@@ -1026,23 +1026,26 @@ body { background: #020306; }
   position: relative;
   z-index: 2;
   display: grid;
-  width: 100%;
+  width: 100vw;
   max-width: none;
   height: 100%;
   margin: 0;
   padding: 74px 24px 98px;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   justify-items: center;
   align-items: center;
   text-align: center;
 }
-.hero-copy { width: min(100%, 1160px); }
+.hero-copy { width: min(calc(100vw - 48px), 1160px); justify-self: center; margin-inline: auto; text-align: center; }
+.hero-copy > .eyebrow { margin-inline: auto; }
+.hero-kicker { text-align: center; }
 .hero-copy > .eyebrow, .hero-kicker { justify-content: center; }
 .hero-copy > .eyebrow { color: #ead5ad; margin-bottom: 17px; }
 .hero-copy .status-dot { background: #ffe7bd; box-shadow: 0 0 13px rgba(255, 222, 172, .7); }
 .hero-kicker { color: rgba(220, 222, 233, .62); margin-bottom: 22px; }
 .hero-kicker span { color: #c9a872; }
 .hero h1.hero-nameplate {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -162,7 +162,7 @@
 
   function animate(timestamp) {
     if (document.hidden || reducedMotion) return;
-    if (previousTime) elapsed += Math.min(timestamp - previousTime, 40);
+    if (previousTime) elapsed += Math.min((timestamp - previousTime) / 1000, .04);
     previousTime = timestamp;
     render(timestamp);
     frame = window.requestAnimationFrame(animate);
