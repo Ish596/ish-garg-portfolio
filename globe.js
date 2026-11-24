@@ -1,222 +1,167 @@
 (() => {
   const canvas = document.querySelector('#globe-canvas');
   const surface = canvas?.closest('.hero-art');
-  const context = canvas?.getContext('2d', { alpha: true });
-  if (!canvas || !surface || !context) return;
+  if (!canvas || !surface) return;
+
+  const gl = canvas.getContext('webgl', { alpha: true, antialias: true, premultipliedAlpha: false });
+  if (!gl) {
+    canvas.classList.add('globe-canvas-fallback');
+    return;
+  }
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const pointer = { x: 0, y: 0, active: false };
+  const vertexSource = `
+    attribute vec3 a_position;
+    uniform vec2 u_resolution;
+    uniform vec2 u_center;
+    uniform float u_radius;
+    uniform float u_spin;
+    uniform vec2 u_pointer;
+    varying vec3 v_normal;
+
+    void main() {
+      float spin = u_spin + u_pointer.x * 0.34;
+      float tilt = -0.24 + u_pointer.y * 0.27;
+      vec3 p = a_position;
+
+      float cs = cos(spin);
+      float sn = sin(spin);
+      p = vec3(p.x * cs + p.z * sn, p.y, -p.x * sn + p.z * cs);
+
+      float ct = cos(tilt);
+      float st = sin(tilt);
+      p = vec3(p.x, p.y * ct - p.z * st, p.y * st + p.z * ct);
+      v_normal = p;
+
+      vec2 pixel = u_center + p.xy * u_radius;
+      vec2 clip = vec2(pixel.x / u_resolution.x * 2.0 - 1.0, 1.0 - pixel.y / u_resolution.y * 2.0);
+      gl_Position = vec4(clip, -p.z * 0.94, 1.0);
+    }
+  `;
+
+  const fragmentSource = `
+    precision mediump float;
+    varying vec3 v_normal;
+
+    void main() {
+      vec3 n = normalize(v_normal);
+      vec3 light = normalize(vec3(-0.42, 0.56, 0.82));
+      float diffuse = max(dot(n, light), 0.0);
+      float facing = max(n.z, 0.0);
+      float fresnel = pow(1.0 - facing, 2.4);
+
+      float latitude = asin(clamp(n.y, -1.0, 1.0));
+      float longitude = atan(n.x, n.z);
+      float parallels = 1.0 - smoothstep(0.025, 0.06, abs(sin(latitude * 8.0)));
+      float meridians = 1.0 - smoothstep(0.024, 0.058, abs(sin(longitude * 6.0)));
+      float grid = max(parallels * 0.42, meridians * 0.64) * smoothstep(-0.25, 0.22, n.z);
+
+      vec3 base = mix(vec3(0.012, 0.055, 0.16), vec3(0.035, 0.24, 0.49), 0.18 + diffuse * 0.72);
+      vec3 color = base + vec3(0.04, 0.25, 0.40) * pow(diffuse, 2.0);
+      color += vec3(0.21, 0.76, 0.92) * grid;
+      color += vec3(0.17, 0.49, 0.81) * fresnel * 0.78;
+
+      vec3 halfVector = normalize(light + vec3(0.0, 0.0, 1.0));
+      float highlight = pow(max(dot(n, halfVector), 0.0), 28.0);
+      color += vec3(0.55, 0.9, 1.0) * highlight * 0.72;
+
+      gl_FragColor = vec4(color, 1.0);
+    }
+  `;
+
+  function compileShader(type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  }
+
+  const vertexShader = compileShader(gl.VERTEX_SHADER, vertexSource);
+  const fragmentShader = compileShader(gl.FRAGMENT_SHADER, fragmentSource);
+  if (!vertexShader || !fragmentShader) {
+    canvas.classList.add('globe-canvas-fallback');
+    return;
+  }
+
+  const program = gl.createProgram();
+  gl.attachShader(program, vertexShader);
+  gl.attachShader(program, fragmentShader);
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    canvas.classList.add('globe-canvas-fallback');
+    return;
+  }
+
+  const latitudeSteps = 56;
+  const longitudeSteps = 88;
+  const positions = [];
+  const indices = [];
+  for (let row = 0; row <= latitudeSteps; row += 1) {
+    const latitude = -Math.PI / 2 + row / latitudeSteps * Math.PI;
+    for (let column = 0; column <= longitudeSteps; column += 1) {
+      const longitude = column / longitudeSteps * Math.PI * 2;
+      const cosLatitude = Math.cos(latitude);
+      positions.push(
+        cosLatitude * Math.sin(longitude),
+        Math.sin(latitude),
+        cosLatitude * Math.cos(longitude)
+      );
+    }
+  }
+  for (let row = 0; row < latitudeSteps; row += 1) {
+    for (let column = 0; column < longitudeSteps; column += 1) {
+      const first = row * (longitudeSteps + 1) + column;
+      const next = first + longitudeSteps + 1;
+      indices.push(first, next, first + 1, next, next + 1, first + 1);
+    }
+  }
+
+  const vertexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+  const indexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+
+  gl.useProgram(program);
+  const positionLocation = gl.getAttribLocation(program, 'a_position');
+  gl.enableVertexAttribArray(positionLocation);
+  gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
+  const uniforms = {
+    resolution: gl.getUniformLocation(program, 'u_resolution'),
+    center: gl.getUniformLocation(program, 'u_center'),
+    radius: gl.getUniformLocation(program, 'u_radius'),
+    spin: gl.getUniformLocation(program, 'u_spin'),
+    pointer: gl.getUniformLocation(program, 'u_pointer')
+  };
+
+  const pointer = { x: 0, y: 0, targetX: 0, targetY: 0 };
   let width = 0;
   let height = 0;
-  let radius = 0;
   let centerX = 0;
   let centerY = 0;
-  let spin = 0.25;
-  let tiltX = -0.2;
-  let tiltY = 0.12;
-  let targetTiltX = tiltX;
-  let targetTiltY = tiltY;
+  let radius = 0;
+  let spin = 0.3;
   let frame = 0;
-
-  const radians = (degrees) => degrees * Math.PI / 180;
-
-  function spherePoint(latitude, longitude) {
-    const lat = radians(latitude);
-    const lon = radians(longitude) + spin;
-    const cosLat = Math.cos(lat);
-    const x = cosLat * Math.sin(lon);
-    let y = Math.sin(lat);
-    let z = cosLat * Math.cos(lon);
-
-    const tiltedY = y * Math.cos(tiltX) - z * Math.sin(tiltX);
-    const tiltedZ = y * Math.sin(tiltX) + z * Math.cos(tiltX);
-    const rotatedX = x * Math.cos(tiltY) + tiltedZ * Math.sin(tiltY);
-    const rotatedZ = -x * Math.sin(tiltY) + tiltedZ * Math.cos(tiltY);
-    y = tiltedY;
-    z = rotatedZ;
-
-    return { x: centerX + rotatedX * radius, y: centerY - y * radius, z };
-  }
-
-  function drawCurve(points, color, lineWidth, dash = []) {
-    for (const front of [false, true]) {
-      context.beginPath();
-      let drawing = false;
-      for (let index = 0; index < points.length - 1; index += 1) {
-        const from = points[index];
-        const to = points[index + 1];
-        const segmentIsFront = from.z >= 0 && to.z >= 0;
-        const segmentIsBack = from.z < 0 && to.z < 0;
-        if ((front && segmentIsFront) || (!front && segmentIsBack)) {
-          if (!drawing) context.moveTo(from.x, from.y);
-          context.lineTo(to.x, to.y);
-          drawing = true;
-        } else {
-          drawing = false;
-        }
-      }
-      context.strokeStyle = color;
-      context.lineWidth = lineWidth;
-      context.setLineDash(front ? [] : dash);
-      context.stroke();
-    }
-    context.setLineDash([]);
-  }
-
-  function orbitPoint(angle, phase, inclination, orbitRadius) {
-    const t = angle + phase;
-    const x = Math.cos(t) * orbitRadius;
-    const y = Math.sin(t) * orbitRadius * Math.cos(inclination);
-    const z = Math.sin(t) * orbitRadius * Math.sin(inclination);
-    const turnedX = x * Math.cos(tiltY) + z * Math.sin(tiltY);
-    const turnedZ = -x * Math.sin(tiltY) + z * Math.cos(tiltY);
-    return { x: centerX + turnedX * radius, y: centerY - y * radius, z: turnedZ };
-  }
-
-  function drawOrbit(phase, inclination, orbitRadius, color, lineWidth, front) {
-    const points = [];
-    for (let index = 0; index <= 160; index += 1) {
-      points.push(orbitPoint(index / 160 * Math.PI * 2, phase, inclination, orbitRadius));
-    }
-    context.beginPath();
-    let drawing = false;
-    for (let index = 0; index < points.length - 1; index += 1) {
-      const from = points[index];
-      const to = points[index + 1];
-      const isFront = from.z >= 0 && to.z >= 0;
-      const isBack = from.z < 0 && to.z < 0;
-      if ((front && isFront) || (!front && isBack)) {
-        if (!drawing) context.moveTo(from.x, from.y);
-        context.lineTo(to.x, to.y);
-        drawing = true;
-      } else {
-        drawing = false;
-      }
-    }
-    context.strokeStyle = front ? color : 'rgba(101, 174, 255, .22)';
-    context.lineWidth = front ? lineWidth : Math.max(1, lineWidth * .65);
-    context.shadowColor = front ? color : 'transparent';
-    context.shadowBlur = front ? 13 : 0;
-    context.stroke();
-    context.shadowBlur = 0;
-  }
-
-  function render() {
-    context.clearRect(0, 0, width, height);
-
-    const halo = context.createRadialGradient(centerX, centerY, radius * .28, centerX, centerY, radius * 1.55);
-    halo.addColorStop(0, 'rgba(79, 179, 255, .17)');
-    halo.addColorStop(.62, 'rgba(80, 128, 255, .09)');
-    halo.addColorStop(1, 'rgba(80, 128, 255, 0)');
-    context.fillStyle = halo;
-    context.beginPath();
-    context.arc(centerX, centerY, radius * 1.55, 0, Math.PI * 2);
-    context.fill();
-
-    drawOrbit(-spin * .46, .7, 1.24, '#67dcff', 2.3, false);
-    drawOrbit(spin * .28, 1.16, 1.11, '#a99aff', 1.5, false);
-
-    context.save();
-    context.beginPath();
-    context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    context.clip();
-
-    const sphere = context.createRadialGradient(centerX - radius * .36, centerY - radius * .42, radius * .06, centerX, centerY, radius * 1.2);
-    sphere.addColorStop(0, '#8eeaff');
-    sphere.addColorStop(.12, '#347fc9');
-    sphere.addColorStop(.42, '#1552a2');
-    sphere.addColorStop(.78, '#0b3479');
-    sphere.addColorStop(1, '#061b45');
-    context.fillStyle = sphere;
-    context.fillRect(centerX - radius, centerY - radius, radius * 2, radius * 2);
-
-    const latitudeLines = [];
-    for (let latitude = -72; latitude <= 72; latitude += 18) {
-      const points = [];
-      for (let longitude = -180; longitude <= 180; longitude += 3) {
-        points.push(spherePoint(latitude, longitude));
-      }
-      latitudeLines.push(points);
-    }
-    const longitudeLines = [];
-    for (let longitude = -180; longitude < 180; longitude += 22.5) {
-      const points = [];
-      for (let latitude = -90; latitude <= 90; latitude += 3) {
-        points.push(spherePoint(latitude, longitude));
-      }
-      longitudeLines.push(points);
-    }
-    latitudeLines.forEach((points, index) => drawCurve(points, index === 4 ? 'rgba(137, 245, 255, .4)' : 'rgba(132, 208, 255, .24)', index === 4 ? 1.15 : .8, [2, 5]));
-    longitudeLines.forEach((points, index) => drawCurve(points, index % 2 === 0 ? 'rgba(172, 163, 255, .3)' : 'rgba(122, 210, 255, .22)', .8, [2, 5]));
-
-    const nodePoints = [];
-    for (let latitude = -60; latitude <= 60; latitude += 20) {
-      for (let longitude = -180; longitude < 180; longitude += 30) {
-        const point = spherePoint(latitude, longitude);
-        if (point.z > .08) nodePoints.push(point);
-      }
-    }
-    nodePoints.forEach((point, index) => {
-      const depth = Math.max(0, point.z);
-      context.beginPath();
-      context.arc(point.x, point.y, 1 + depth * 1.5, 0, Math.PI * 2);
-      context.fillStyle = index % 5 === 0 ? '#c1b5ff' : '#a7f7ff';
-      context.globalAlpha = .45 + depth * .5;
-      context.shadowColor = context.fillStyle;
-      context.shadowBlur = 5 + depth * 9;
-      context.fill();
-      context.shadowBlur = 0;
-      context.globalAlpha = 1;
-    });
-
-    const specular = context.createRadialGradient(centerX - radius * .34, centerY - radius * .42, 0, centerX - radius * .34, centerY - radius * .42, radius * .64);
-    specular.addColorStop(0, 'rgba(222, 252, 255, .3)');
-    specular.addColorStop(.24, 'rgba(132, 222, 255, .12)');
-    specular.addColorStop(1, 'rgba(132, 222, 255, 0)');
-    context.fillStyle = specular;
-    context.fillRect(centerX - radius, centerY - radius, radius * 2, radius * 2);
-
-    const edgeShade = context.createRadialGradient(centerX, centerY, radius * .45, centerX, centerY, radius);
-    edgeShade.addColorStop(0, 'rgba(2, 9, 31, 0)');
-    edgeShade.addColorStop(.72, 'rgba(2, 9, 31, .06)');
-    edgeShade.addColorStop(1, 'rgba(2, 8, 28, .76)');
-    context.fillStyle = edgeShade;
-    context.fillRect(centerX - radius, centerY - radius, radius * 2, radius * 2);
-    context.restore();
-
-    context.beginPath();
-    context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    context.strokeStyle = 'rgba(176, 241, 255, .82)';
-    context.lineWidth = 1.4;
-    context.shadowColor = '#45c8ff';
-    context.shadowBlur = 14;
-    context.stroke();
-    context.shadowBlur = 0;
-
-    drawOrbit(-spin * .46, .7, 1.24, '#67dcff', 2.3, true);
-    drawOrbit(spin * .28, 1.16, 1.11, '#a99aff', 1.5, true);
-  }
-
-  function animate() {
-    if (document.hidden || reducedMotion) return;
-    spin += .004;
-    tiltX += (targetTiltX - tiltX) * .045;
-    tiltY += (targetTiltY - tiltY) * .045;
-    render();
-    frame = window.requestAnimationFrame(animate);
-  }
 
   function resize() {
     const bounds = surface.getBoundingClientRect();
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.6);
     width = bounds.width;
     height = bounds.height;
-    radius = Math.min(width * .41, height * .39);
-    centerX = width * .53;
-    centerY = height * .51;
-    const ratio = Math.min(window.devicePixelRatio || 1, 1.6);
-    canvas.width = Math.round(width * ratio);
-    canvas.height = Math.round(height * ratio);
-    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    canvas.width = Math.round(width * pixelRatio);
+    canvas.height = Math.round(height * pixelRatio);
+    centerX = width * pixelRatio * 0.53;
+    centerY = height * pixelRatio * 0.51;
+    radius = Math.min(width * 0.43, height * 0.43) * pixelRatio;
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
+    gl.uniform2f(uniforms.center, centerX, centerY);
+    gl.uniform1f(uniforms.radius, radius);
     render();
     if (!reducedMotion && !document.hidden) {
       window.cancelAnimationFrame(frame);
@@ -224,19 +169,36 @@
     }
   }
 
+  function render() {
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    gl.uniform1f(uniforms.spin, spin);
+    gl.uniform2f(uniforms.pointer, pointer.x, pointer.y);
+    gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+  }
+
+  function animate() {
+    if (document.hidden || reducedMotion) return;
+    spin += 0.0032;
+    pointer.x += (pointer.targetX - pointer.x) * 0.055;
+    pointer.y += (pointer.targetY - pointer.y) * 0.055;
+    render();
+    frame = window.requestAnimationFrame(animate);
+  }
+
   if (!reducedMotion) {
     surface.addEventListener('pointermove', (event) => {
       const bounds = surface.getBoundingClientRect();
-      pointer.x = (event.clientX - bounds.left) / bounds.width;
-      pointer.y = (event.clientY - bounds.top) / bounds.height;
-      pointer.active = true;
-      targetTiltX = (pointer.y - .5) * .68;
-      targetTiltY = (pointer.x - .5) * 1.05;
+      pointer.targetX = ((event.clientX - bounds.left) / bounds.width - 0.5) * 1.15;
+      pointer.targetY = ((event.clientY - bounds.top) / bounds.height - 0.5) * 0.9;
     }, { passive: true });
     surface.addEventListener('pointerleave', () => {
-      pointer.active = false;
-      targetTiltX = -.2;
-      targetTiltY = .12;
+      pointer.targetX = 0;
+      pointer.targetY = 0;
     }, { passive: true });
   }
 
