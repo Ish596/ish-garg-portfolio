@@ -19,9 +19,10 @@
   <title>Ish Garg — AI Developer & Automation Engineer</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./styles.css">
-  <link rel="stylesheet" href="./visual-refresh.css?v=9005895">
+  <link rel="stylesheet" href="./visual-refresh.css?v=cosmic-orbit-1">
   <script src="./script.js" defer></script>
   <script src="./network.js" defer></script>
+  <script src="./cosmos.js" defer></script>
   <script src="./globe.js" defer></script>
 </head>
 <body>
@@ -47,12 +48,13 @@
 
   <main id="main">
     <section class="hero section-pad" aria-labelledby="hero-title">
+      <canvas class="cosmos-canvas" id="cosmos-canvas" aria-hidden="true"></canvas>
       <div class="hero-grid container">
         <div class="hero-copy" data-reveal>
           <p class="eyebrow"><span class="status-dot"></span> OPEN TO AI / ML OPPORTUNITIES</p>
-          <p class="hero-kicker">AI DEVELOPER <span>/</span> AUTOMATION ENGINEER <span>/</span> INDIA</p>
-          <h1 id="hero-title">I connect ideas to action with <span>AI &amp; automation.</span></h1>
-          <p class="hero-intro">I’m Ish Garg, a Computer Science Engineering undergraduate building practical AI tools and automated workflows with Python, Gemini, and n8n.</p>
+          <p class="hero-kicker">AI DEVELOPER <span>·</span> AUTOMATION ENGINEER <span>·</span> INDIA</p>
+          <h1 class="hero-nameplate" id="hero-title"><span>Ish</span><small>AI Developer<br>&amp; Automation Engineer</small><span>Garg</span></h1>
+          <p class="hero-intro">I build practical AI tools and automated workflows with Python, Gemini, and n8n.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#projects">Explore my work <span aria-hidden="true">↘</span></a>
             <a class="button button-quiet" href="mailto:gargish686@gmail.com">Get in touch <span aria-hidden="true">↗</span></a>
@@ -64,7 +66,28 @@
           </div>
         </div>
 
-        <div class="hero-art" data-reveal aria-label="Interactive AI and automation workflow simulation in a universe theme">
+      </div>
+      <div class="hero-bottom container" data-reveal>
+        <span>SCROLL TO EXPLORE</span><span class="scroll-line" aria-hidden="true"></span>
+        <span class="hero-bottom-note">AI / ML <i>·</i> AUTOMATION <i>·</i> PYTHON</span>
+      </div>
+    </section>
+
+    <div class="ticker" aria-label="Areas of interest">
+      <div class="ticker-track" aria-hidden="true">
+        <span>AI SYSTEMS</span><b>✦</b><span>WORKFLOW AUTOMATION</span><b>✦</b><span>PYTHON</span><b>✦</b><span>HUMAN IN THE LOOP</span><b>✦</b>
+        <span>AI SYSTEMS</span><b>✦</b><span>WORKFLOW AUTOMATION</span><b>✦</b><span>PYTHON</span><b>✦</b><span>HUMAN IN THE LOOP</span><b>✦</b>
+      </div>
+    </div>
+
+    <section class="workflow-showcase section-pad" aria-labelledby="workflow-title">
+      <div class="container">
+        <div class="workflow-heading" data-reveal>
+          <p class="eyebrow"><span class="eyebrow-rule"></span> INTERACTIVE AI SYSTEM</p>
+          <h2 id="workflow-title">A workflow, in motion.</h2>
+          <p>Choose a scenario and run a short simulation of an AI-assisted workflow.</p>
+        </div>
+        <div class="hero-art workflow-art" data-reveal aria-label="Interactive AI and automation workflow simulation">
           <canvas class="globe-canvas" id="globe-canvas" aria-hidden="true"></canvas>
           <div class="art-grid" aria-hidden="true"></div>
           <div class="orbit orbit-one" aria-hidden="true"></div>
@@ -88,18 +111,7 @@
           <span class="art-orb orb-a" aria-hidden="true"></span><span class="art-orb orb-b" aria-hidden="true"></span>
         </div>
       </div>
-      <div class="hero-bottom container" data-reveal>
-        <span>SCROLL TO EXPLORE</span><span class="scroll-line" aria-hidden="true"></span>
-        <span class="hero-bottom-note">AI / ML <i>·</i> AUTOMATION <i>·</i> PYTHON</span>
-      </div>
     </section>
-
-    <div class="ticker" aria-label="Areas of interest">
-      <div class="ticker-track" aria-hidden="true">
-        <span>AI SYSTEMS</span><b>✦</b><span>WORKFLOW AUTOMATION</span><b>✦</b><span>PYTHON</span><b>✦</b><span>HUMAN IN THE LOOP</span><b>✦</b>
-        <span>AI SYSTEMS</span><b>✦</b><span>WORKFLOW AUTOMATION</span><b>✦</b><span>PYTHON</span><b>✦</b><span>HUMAN IN THE LOOP</span><b>✦</b>
-      </div>
-    </div>
 
     <section class="about section-pad" id="about" aria-labelledby="about-title">
       <div class="container about-layout">
