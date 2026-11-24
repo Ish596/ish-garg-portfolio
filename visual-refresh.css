@@ -1147,3 +1147,25 @@ body { background: #020306; }
   .workflow-showcase > .container { gap: 24px; }
   .workflow-art { height: min(380px, 95vw); border-radius: 18px; }
 }
+
+/* Use normal flex centering for dependable positioning on mobile and desktop. */
+.hero-grid.container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  max-width: none;
+  height: 100%;
+  margin: 0;
+}
+.hero-grid.container > .hero-copy {
+  position: relative !important;
+  top: auto;
+  left: auto;
+  width: min(calc(100vw - 48px), 1160px);
+  max-width: none;
+  margin: auto;
+  transform: none !important;
+  translate: none;
+}
