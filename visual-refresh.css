@@ -934,3 +934,66 @@ dialog.case-dialog::backdrop { background: rgba(3, 15, 43, .83); }
   .flow-card { width: 170px; height: 56px; padding: 8px 10px; }
   .hero-art > .orbit-one { width: 92%; height: 56%; }
 }
+
+/* Dark charcoal-blue space palette inspired by restrained WebGL portfolio scenes. */
+:root {
+  --bg: #050b11;
+  --bg-soft: #08131d;
+  --panel: #0b1924;
+  --ink: #eff6fc;
+  --muted: #adbece;
+  --quiet: #7d91a5;
+  --mint: #69d8df;
+  --blue: #9da6ff;
+  --stroke: rgba(149, 184, 213, .16);
+}
+body {
+  background:
+    radial-gradient(ellipse at 76% 22%, rgba(30, 76, 119, .14), transparent 38rem),
+    radial-gradient(ellipse at 8% 76%, rgba(26, 62, 91, .10), transparent 42rem),
+    radial-gradient(ellipse at 52% 100%, rgba(21, 52, 79, .08), transparent 48rem),
+    linear-gradient(145deg, #03070c, #07121b 52%, #04090f);
+}
+.network-canvas { opacity: .28; }
+.site-header { background: rgba(3, 8, 13, .91); border-bottom-color: rgba(137, 174, 204, .13); }
+.hero-art {
+  border-color: rgba(128, 177, 211, .25);
+  background:
+    radial-gradient(ellipse at 53% 48%, rgba(32, 102, 164, .16), transparent 47%),
+    radial-gradient(ellipse at 14% 8%, rgba(73, 79, 153, .08), transparent 40%),
+    linear-gradient(145deg, rgba(8, 22, 34, .97), rgba(4, 12, 19, .98));
+  box-shadow: 0 32px 100px rgba(0, 0, 0, .48), inset 0 1px rgba(210, 232, 249, .08);
+}
+.hero-art::before { background: radial-gradient(circle, rgba(54, 161, 197, .13), transparent 70%); }
+.hero-art::after { background: radial-gradient(circle, rgba(99, 97, 188, .12), transparent 70%); }
+.hero-art > .orbit-one { border-color: rgba(127, 205, 225, .16); }
+.art-label-top, .scenario-switcher {
+  background: rgba(3, 11, 18, .88);
+  border-color: rgba(144, 184, 211, .22);
+}
+.flow-card {
+  background: linear-gradient(140deg, rgba(9, 25, 38, .91), rgba(5, 16, 26, .9));
+  border-color: rgba(145, 184, 211, .2);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .34);
+}
+.flow-card.is-active { background: linear-gradient(140deg, rgba(13, 53, 71, .94), rgba(10, 25, 51, .93)); }
+.ticker { background: rgba(4, 10, 16, .62); border-color: rgba(137, 174, 204, .12); }
+.about { background: linear-gradient(180deg, rgba(8, 19, 29, .36), rgba(5, 11, 17, .2)); }
+.projects { background: linear-gradient(180deg, #08131d, #060e16); border-color: rgba(137, 174, 204, .13); }
+.project-card {
+  background: linear-gradient(145deg, rgba(10, 24, 35, .96), rgba(6, 15, 23, .98));
+  border-color: rgba(137, 174, 204, .17);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, .28), inset 0 1px rgba(220, 237, 255, .04);
+}
+.project-visual, .project-shot { background-color: #091b28; }
+.visual-vantara { background: radial-gradient(ellipse at 78% 14%, rgba(56, 111, 153, .22), transparent 43%), radial-gradient(ellipse at 19% 83%, rgba(43, 127, 139, .11), transparent 47%), linear-gradient(145deg, #102330, #08131c); }
+.skills { background: linear-gradient(180deg, rgba(8, 19, 29, .36), rgba(5, 11, 17, .2)); }
+.contact-panel {
+  background:
+    radial-gradient(ellipse at 87% 13%, rgba(46, 128, 153, .12), transparent 35%),
+    radial-gradient(ellipse at 62% 100%, rgba(78, 71, 144, .11), transparent 45%),
+    linear-gradient(125deg, #0b1b28, #07131e 72%, #091a27);
+  border-color: rgba(139, 180, 208, .25);
+}
+dialog.case-dialog { background: linear-gradient(145deg, #0c1d2a, #050d15); border-color: rgba(139, 180, 208, .3); }
+dialog.case-dialog::backdrop { background: rgba(0, 3, 7, .88); }
