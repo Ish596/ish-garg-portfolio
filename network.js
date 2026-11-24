@@ -15,9 +15,9 @@
 
     if (pointer.active && !prefersReducedMotion) {
       const glow = context.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, 210);
-      glow.addColorStop(0, 'rgba(154, 139, 255, .14)');
-      glow.addColorStop(.48, 'rgba(68, 197, 227, .07)');
-      glow.addColorStop(1, 'rgba(68, 197, 227, 0)');
+      glow.addColorStop(0, 'rgba(255, 225, 178, .13)');
+      glow.addColorStop(.48, 'rgba(255, 244, 225, .055)');
+      glow.addColorStop(1, 'rgba(255, 244, 225, 0)');
       context.fillStyle = glow;
       context.fillRect(0, 0, width, height);
     }
@@ -43,7 +43,7 @@
           context.beginPath();
           context.moveTo(pointer.x, pointer.y);
           context.lineTo(star.x, star.y);
-          context.strokeStyle = `rgba(167, 221, 255, ${(1 - distanceToPointer / 170) * .42})`;
+          context.strokeStyle = `rgba(255, 224, 179, ${(1 - distanceToPointer / 170) * .3})`;
           context.lineWidth = .8;
           context.stroke();
         }
@@ -84,8 +84,8 @@
     stars.length = 0;
     for (let index = 0; index < count; index += 1) {
       const tintIndex = index % 8;
-      const tint = tintIndex === 0 ? '#ffa9d6' : tintIndex < 4 ? '#a9eaff' : '#c3b6ff';
-      const linkColor = tintIndex === 0 ? 'rgba(255, 169, 214, ' : tintIndex < 4 ? 'rgba(133, 224, 255, ' : 'rgba(180, 164, 255, ';
+      const tint = tintIndex === 0 ? '#f3d6a5' : tintIndex < 4 ? '#f4f0e8' : '#d9c8a7';
+      const linkColor = tintIndex === 0 ? 'rgba(243, 214, 165, ' : tintIndex < 4 ? 'rgba(244, 240, 232, ' : 'rgba(217, 200, 167, ';
       stars.push({
         x: Math.random() * width,
         y: Math.random() * height,

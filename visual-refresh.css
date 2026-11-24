@@ -839,7 +839,7 @@ dialog.case-dialog::backdrop { background: rgba(2, 3, 13, .86); }
   .hero-art, .project-card, .contact-panel, .skill-row { transition: none !important; }
 }
 
-/* Brighter deep-blue space palette and the new rendered 3D globe. */
+/* Previous universe palette. */
 :root {
   --bg: #0b2d69;
   --bg-soft: #0d3374;
@@ -871,14 +871,6 @@ body {
 }
 .hero-art::before { background: radial-gradient(circle, rgba(69, 208, 255, .22), transparent 70%); }
 .hero-art::after { background: radial-gradient(circle, rgba(147, 113, 255, .23), transparent 70%); }
-.globe-canvas {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
 .hero-art > .orbit { display: none; }
 .art-grid { opacity: .2; }
 .art-label-top, .scenario-switcher, .flow-card, .flow-demo-control, .art-caption { z-index: 3; }
@@ -917,9 +909,7 @@ dialog.case-dialog::backdrop { background: rgba(3, 15, 43, .83); }
   .hero-art { background: radial-gradient(ellipse at 52% 48%, rgba(44, 112, 221, .32), transparent 51%), linear-gradient(145deg, #12346f, #092653); }
 }
 
-/* Keep the globe itself clear: one quiet orbit, fewer interface cards. */
-.globe-canvas { z-index: 1; }
-.globe-canvas-fallback { background: radial-gradient(circle at 38% 32%, #4b9ddd, #1552a2 52%, #061b45 76%); border-radius: 50%; inset: 8% 10% auto auto; width: 78%; height: 84%; }
+/* Refined workflow demo cards and orbit. */
 .art-grid { display: none; }
 .hero-art > .orbit { display: block; z-index: 2; border-color: rgba(139, 221, 255, .2); pointer-events: none; }
 .hero-art > .orbit-one { width: 88%; height: 54%; animation: orbit-spin 34s linear infinite; }
@@ -1168,4 +1158,138 @@ body { background: #020306; }
   margin: auto;
   transform: none !important;
   translate: none;
+}
+
+/* One coherent black, starlight, and champagne palette across every section. */
+:root {
+  --bg: #020306;
+  --bg-soft: #050608;
+  --panel: #0a0a0c;
+  --ink: #f4f1ea;
+  --muted: #bbb5ab;
+  --quiet: #817b72;
+  --mint: #dec18c;
+  --blue: #d9d1c2;
+  --stroke: rgba(224, 201, 158, .16);
+}
+body {
+  background:
+    radial-gradient(1px 1px at 18px 28px, rgba(250, 229, 194, .3) 99%, transparent) 0 0 / 149px 163px,
+    radial-gradient(1px 1px at 72px 91px, rgba(225, 231, 238, .2) 99%, transparent) 0 0 / 191px 207px,
+    radial-gradient(ellipse at 78% 16%, rgba(138, 99, 49, .065), transparent 34rem),
+    linear-gradient(180deg, #020306, #030406 48%, #020305);
+  color: var(--ink);
+}
+.network-canvas { opacity: .15; }
+.site-header { background: rgba(0, 0, 0, .93); border-bottom-color: rgba(229, 213, 185, .13); }
+.brand-mark { border-color: rgba(225, 198, 151, .52); color: #ead5ad; }
+.brand-dot, .nav-contact span { color: #dec18c; }
+.primary-nav > a { color: #b6b1a9; }
+.primary-nav > a:hover, .hero-socials a:hover { color: #f4ead8; }
+.primary-nav .nav-contact { color: #f4f1ea; border-color: rgba(224, 201, 158, .24); }
+.menu-toggle { border-color: rgba(224, 201, 158, .22); }
+.menu-toggle span { background: #e8dfce; }
+.primary-nav { background-color: rgba(2, 3, 6, .98); }
+
+.hero { background: #020306; }
+.hero::before { background: radial-gradient(ellipse at 50% 50%, transparent 17%, rgba(2, 3, 6, .1) 58%, rgba(2, 3, 6, .62) 100%); }
+.hero-copy > .eyebrow { color: #ead5ad; border-color: rgba(224, 201, 158, .2); background: rgba(224, 201, 158, .045); }
+.hero-kicker, .hero-intro { color: rgba(226, 222, 213, .73); }
+.hero-kicker span { color: #d6b87e; }
+.hero-nameplate > small { color: #d8d0c3; }
+.button-primary { color: #18130d; background: linear-gradient(110deg, #f7f1e5, #ddc490); }
+.button-quiet span, .hero-socials a span { color: #ddc18e; }
+.hero-bottom { color: rgba(207, 201, 189, .48); }
+.scroll-line { background: linear-gradient(90deg, transparent, rgba(239, 222, 186, .65), transparent); }
+
+.ticker { background: #040507; border-block-color: rgba(224, 201, 158, .12); }
+.ticker-track { color: #c9c2b6; }
+.ticker-track b { color: #ddc18c; }
+.workflow-showcase, .about, .skills { background: #030406; }
+.workflow-showcase { border-top-color: rgba(224, 201, 158, .1); }
+.workflow-heading .eyebrow, .section-heading .eyebrow { color: #ddc18c; }
+.workflow-heading h2, .section-heading h2, .contact h2 { color: #f2eee7; }
+.workflow-heading > p:last-child, .projects-note, .about-copy p, .contact-copy > p:not(.eyebrow) { color: #aaa49a; }
+.about-copy .about-lead { color: #eee9df; }
+.about-meta, .about-meta > div, .contact-links, .contact-links > a { border-color: rgba(224, 201, 158, .15); }
+.meta-label, .about-meta > div > span { color: #928b80; }
+
+.projects { background: linear-gradient(180deg, #050608, #030405); border-color: rgba(224, 201, 158, .13); }
+.project-card { background: linear-gradient(145deg, #0b0b0d, #060607); border-color: rgba(224, 201, 158, .16); box-shadow: 0 20px 55px rgba(0, 0, 0, .38), inset 0 1px rgba(248, 238, 220, .035); }
+.project-card:hover { border-color: rgba(222, 193, 140, .56); box-shadow: 0 24px 60px rgba(0, 0, 0, .48), 0 0 34px rgba(202, 159, 86, .09); }
+.project-visual, .project-shot { background-color: #09090a; border-color: rgba(224, 201, 158, .12); }
+.visual-vantara { background: radial-gradient(ellipse at 78% 14%, rgba(194, 148, 79, .12), transparent 43%), radial-gradient(ellipse at 19% 83%, rgba(223, 205, 166, .055), transparent 47%), linear-gradient(145deg, #15120e, #080808); color: #eee7d9; }
+.dash-brand i, .stat-dots i { background: #dfc28d; }
+.dash-panel, .dash-stats > div { border-color: rgba(224, 201, 158, .15); background: rgba(6, 5, 4, .34); }
+.dash-panel-head, .dash-stats b { color: #eee7db; }
+.dash-period b, .stat-ring { color: #dfc28d; }
+.chart-months, .dash-period, .dash-panel-head small, .dash-side-label, .dash-stats small { color: #968b79; }
+.chart-line path, .chart-line polyline { stroke: #d4b374; }
+.visual-index { color: #dfd5c3; background: rgba(5, 5, 5, .88); border-color: rgba(224, 201, 158, .2); }
+.project-body h3, .project-card-featured .project-body h3 { color: #f1ede6; }
+.project-body > p { color: #aaa49a; }
+.project-meta, .project-status { color: #d9c18f; }
+.project-status i { background: #dfc28d; box-shadow: 0 0 9px rgba(223, 194, 141, .48); }
+.status-prototype, .status-learning { color: #c9b99b; }
+.status-prototype i, .status-learning i { background: #c9b99b; box-shadow: 0 0 8px rgba(201, 185, 155, .36); }
+.tag-list span { color: #c7c0b4; border-color: rgba(224, 201, 158, .15); background: rgba(255, 244, 222, .025); }
+.project-links a, .project-links .live-link, .projects-footnote a { color: #e0c48f; border-color: rgba(224, 196, 143, .38); }
+.project-links a:hover, .project-links .live-link:hover { color: #fff3db; border-color: #ead2a7; }
+.filter-button { color: #b7b0a4; border-color: rgba(224, 201, 158, .16); }
+.filter-button span { color: #80796f; }
+.filter-button:hover, .filter-button.is-active { color: #eddbb8; border-color: rgba(224, 201, 158, .55); background: rgba(224, 201, 158, .06); }
+.projects-footnote { color: #8b8378; }
+
+.skill-row { border-color: rgba(224, 201, 158, .15); }
+.skill-row:hover { background: rgba(224, 201, 158, .035); }
+.skill-number, .skill-row > span:last-child { color: #d8bd8b; }
+.skill-row h3 { color: #eee9df; }
+.skill-row p { color: #a9a298; }
+.contact-panel { background: radial-gradient(ellipse at 85% 15%, rgba(155, 112, 53, .11), transparent 36%), radial-gradient(ellipse at 58% 105%, rgba(198, 169, 114, .055), transparent 43%), linear-gradient(130deg, #0c0b09, #050506 68%, #0a0907); border-color: rgba(224, 201, 158, .21); }
+.contact-orbit { border-color: rgba(224, 201, 158, .16); box-shadow: 0 0 0 35px rgba(224, 201, 158, .025), 0 0 0 70px rgba(224, 201, 158, .018); }
+.contact-links > a > span, .site-footer p, .back-top { color: #9e978b; }
+.contact-links > a > b { color: #eee8dd; }
+.contact-links > a > i, .copy-status, .copy-email:hover { color: #dec18c; }
+.copy-email { border-color: rgba(224, 201, 158, .24); }
+.site-footer { border-top-color: rgba(224, 201, 158, .13); }
+.site-footer p span { color: #ddc18c; }
+.site-footer small { border-top-color: rgba(224, 201, 158, .1); color: #746d63; }
+.back-top span { color: #ddc18c; }
+
+.workflow-art { border-color: rgba(224, 201, 158, .17); background: radial-gradient(ellipse at 52% 48%, rgba(150, 108, 49, .075), transparent 54%), radial-gradient(1px 1px at 22px 35px, rgba(239, 222, 186, .32) 99%, transparent) 0 0 / 113px 127px, linear-gradient(145deg, #0b0a08, #050506); }
+.workflow-art::before { background: radial-gradient(circle, rgba(214, 176, 112, .085), transparent 70%); }
+.workflow-art::after { background: radial-gradient(circle, rgba(236, 229, 211, .04), transparent 70%); }
+.workflow-art > .orbit-one { border-color: rgba(220, 191, 141, .17); }
+.workflow-art .flow-card { background: linear-gradient(140deg, rgba(20, 17, 13, .92), rgba(7, 7, 7, .94)); border-color: rgba(224, 201, 158, .17); box-shadow: 0 14px 34px rgba(0, 0, 0, .42); }
+.workflow-art .flow-card.is-active { border-color: rgba(224, 193, 139, .7); background: linear-gradient(140deg, rgba(55, 41, 24, .94), rgba(21, 16, 11, .94)); box-shadow: 0 0 26px rgba(219, 180, 116, .12); }
+.workflow-art .flow-card.is-done { border-color: rgba(224, 193, 139, .4); }
+.workflow-art .flow-card small, .workflow-art .flow-demo-status { color: #b9ae9a; }
+.workflow-art .flow-icon { color: #e1c58e; background: rgba(224, 193, 139, .1); }
+.workflow-art .flow-line { background: rgba(224, 193, 139, .35); }
+.workflow-art .flow-line.is-lit { background: #e0c28d; box-shadow: 0 0 10px rgba(224, 194, 141, .55); }
+.workflow-art .scenario-switcher, .workflow-art .art-label-top { color: #d5c9b3; background: rgba(4, 4, 4, .88); border-color: rgba(224, 201, 158, .19); }
+.workflow-art .scenario-button { color: #a69b88; }
+.workflow-art .scenario-button.is-active { color: #f2dfb9; background: rgba(224, 193, 139, .16); }
+.workflow-art .flow-run { color: #17120a; background: linear-gradient(110deg, #f3ead9, #d8bb83); border-color: rgba(240, 221, 183, .4); }
+.workflow-art .flow-run:hover { background: #fff3d8; }
+.art-caption { color: #b1a58f; }
+.caption-arrow, .mini-pulse { color: #dec18c; }
+.mini-pulse { background: #dec18c; box-shadow: 0 0 11px rgba(222, 193, 140, .56); }
+
+dialog.case-dialog { color: #eee9e0; background: linear-gradient(145deg, #11100d, #050506); border-color: rgba(224, 201, 158, .34); }
+dialog.case-dialog::backdrop { background: rgba(0, 0, 0, .88); }
+.dialog-content { border-block-color: rgba(224, 201, 158, .17); }
+.dialog-content h3 { color: #eee6d8; }
+.dialog-links a { color: #e1c58e; border-color: rgba(224, 193, 139, .42); }
+.case-study-button { color: #ddc18c; }
+.scenario-button:focus-visible, .flow-run:focus-visible, .case-study-button:focus-visible,
+.filter-button:focus-visible, .menu-toggle:focus-visible, .copy-email:focus-visible {
+  outline: 2px solid #e2c58f;
+  outline-offset: 3px;
+}
+::selection { color: #17130d; background: #dcbf88; }
+
+@media (max-width: 680px) {
+  .primary-nav { background: rgba(2, 3, 6, .98); border-bottom-color: rgba(224, 201, 158, .14); }
+  .workflow-art { background-size: auto, auto, auto, auto; }
 }
