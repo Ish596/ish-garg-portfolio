@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#060712">
+  <meta name="theme-color" content="#0b2d69">
   <meta name="description" content="Ish Garg is an AI developer and automation engineer in training, building practical AI systems and human-aware workflows.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Ish Garg — AI Developer & Automation Engineer">
@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="./visual-refresh.css">
   <script src="./script.js" defer></script>
   <script src="./network.js" defer></script>
+  <script src="./globe.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -64,7 +65,7 @@
         </div>
 
         <div class="hero-art" data-reveal aria-label="Interactive AI and automation workflow simulation in a universe theme">
-          <img class="hero-orbit-image" src="./assets/hero-orbit.webp" alt="" aria-hidden="true" fetchpriority="high">
+          <canvas class="globe-canvas" id="globe-canvas" aria-hidden="true"></canvas>
           <div class="art-grid" aria-hidden="true"></div>
           <div class="orbit orbit-one" aria-hidden="true"></div>
           <div class="orbit orbit-two" aria-hidden="true"></div>
