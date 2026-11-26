@@ -25,7 +25,7 @@
 
   function addParticle(x, y, vx, vy, life, size, color, streak = false) {
     particles.push({ x, y, vx, vy, age: 0, life, size, color, streak, phase: random(0, Math.PI * 2) });
-    if (particles.length > 440) particles.splice(0, particles.length - 440);
+    if (particles.length > 300) particles.splice(0, particles.length - 300);
   }
 
   function emitTrail(fromX, fromY, toX, toY) {
@@ -38,13 +38,13 @@
     pointer.dirY = dy / distance;
     const sideX = -pointer.dirY;
     const sideY = pointer.dirX;
-    const steps = Math.max(1, Math.ceil(distance / 7));
+    const steps = Math.max(1, Math.ceil(distance / 10));
 
     for (let step = 1; step <= steps; step += 1) {
       const t = step / steps;
       const x = fromX + dx * t;
       const y = fromY + dy * t;
-      const strands = distance > 22 ? 2 : 1;
+      const strands = distance > 32 ? 2 : 1;
       for (let strand = 0; strand < strands; strand += 1) {
         const offset = random(-5, 5);
         const drift = random(.35, 1.65);
@@ -97,7 +97,7 @@
     if (!hero || !ringContext) return;
     ringWidth = hero.clientWidth;
     ringHeight = hero.clientHeight;
-    ringPixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+    ringPixelRatio = Math.min(window.devicePixelRatio || 1, 1.25);
     ringCanvas.width = Math.max(1, Math.round(ringWidth * ringPixelRatio));
     ringCanvas.height = Math.max(1, Math.round(ringHeight * ringPixelRatio));
     ringContext.setTransform(ringPixelRatio, 0, 0, ringPixelRatio, 0, 0);
@@ -231,7 +231,11 @@
 
   function render(timestamp) {
     if (document.hidden) return;
-    const delta = previousTime ? Math.min((timestamp - previousTime) / 1000, .04) : 1 / 60;
+    if (previousTime && timestamp - previousTime < 1000 / 30) {
+      frame = window.requestAnimationFrame(render);
+      return;
+    }
+    const delta = previousTime ? Math.min((timestamp - previousTime) / 1000, .05) : 1 / 30;
     const frameScale = delta * 60;
     previousTime = timestamp;
     elapsed += delta;
@@ -255,16 +259,18 @@
       const twinkle = .76 + Math.sin(timestamp * .012 + particle.phase) * .24;
       context.globalAlpha = fade * fade * twinkle;
       context.fillStyle = particle.color;
-      context.shadowColor = particle.color;
-      context.shadowBlur = particle.size > 1.3 ? 9 : 4;
+      context.shadowBlur = 0;
 
       if (particle.streak) {
+        context.shadowColor = particle.color;
+        context.shadowBlur = particle.size > 1.3 ? 5 : 0;
         context.strokeStyle = particle.color;
         context.lineWidth = Math.max(.45, particle.size * .65);
         context.beginPath();
         context.moveTo(particle.x - particle.vx * 2, particle.y - particle.vy * 2);
         context.lineTo(particle.x, particle.y);
         context.stroke();
+        context.shadowBlur = 0;
       }
       context.beginPath();
       context.arc(particle.x, particle.y, particle.size * Math.sqrt(fade), 0, Math.PI * 2);
@@ -281,7 +287,7 @@
   function resize() {
     width = window.innerWidth;
     height = window.innerHeight;
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.25);
     canvas.width = Math.round(width * pixelRatio);
     canvas.height = Math.round(height * pixelRatio);
     canvas.style.width = `${width}px`;

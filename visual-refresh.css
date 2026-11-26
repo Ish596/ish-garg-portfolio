@@ -1011,7 +1011,7 @@ body { background: #020306; }
   pointer-events: none;
   background: radial-gradient(ellipse at 50% 50%, transparent 17%, rgba(2, 3, 6, .16) 58%, rgba(2, 3, 6, .7) 100%);
 }
-.cosmos-canvas { position: fixed; z-index: 55; inset: 0; width: 100vw; height: 100vh; pointer-events: none; opacity: .86; mix-blend-mode: screen; }
+.cosmos-canvas { position: fixed; z-index: 55; inset: 0; width: 100vw; height: 100vh; pointer-events: none; opacity: .92; }
 .hero-grid.container {
   position: static;
   z-index: 2;
