@@ -1,6 +1,6 @@
 # Ish Garg — Portfolio
 
-A responsive personal portfolio built with plain HTML, CSS, and JavaScript. It is published at https://ish596.github.io/.
+A responsive personal portfolio built with plain HTML, CSS, and JavaScript. It is published at https://ish596.github.io/ish-garg-portfolio/.
 
 ## Interactive features
 
